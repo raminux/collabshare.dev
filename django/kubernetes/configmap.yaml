@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-configmap
+data:
+  RABBIT_SERVICE: 'rabbitmq-service'
+  POSTGRES_DB: 'django'
+  POSTGRES_USER: 'postgres'
+  POSTGRES_PASSWORD: 'mypass'
+  POSTGRES_HOST: 'postgres-service'
+  POSTGRES_PORT: '5432'

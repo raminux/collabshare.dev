@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: graphs-configmap
+data:
+  PORT: nothing
+  RABBIT_SERVICE: 'rabbitmq-service'
+  NEO4J_SERVICE: 'neo4j-graphs-service'
+  NEO4J_PORT: '7687'

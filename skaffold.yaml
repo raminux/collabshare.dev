@@ -1,0 +1,53 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: collabtest
+build:
+  artifacts:
+    - image: collabshare/rabbitmq
+      context: rabbitmq
+      docker:
+        dockerfile: Dockerfile
+    - image: raminesmzad/django
+      context: django
+      docker:
+        dockerfile: Dockerfile
+    - image: raminesmzad/graphs
+      context: nodejs/graphs
+      docker:
+        dockerfile: Dockerfile
+    - image: raminesmzad/neo4j_graphs
+      context: dbs/neo4j_graphs
+      docker:
+        dockerfile: Dockerfile
+    - image: raminesmzad/postgres
+      context: dbs/postgres_django
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - dbs/neo4j_graphs/kubernetes/ingress.yaml
+    - dbs/neo4j_graphs/kubernetes/pv.yaml
+    - dbs/neo4j_graphs/kubernetes/pvc.yaml
+    - dbs/neo4j_graphs/kubernetes/service.yaml
+    - dbs/neo4j_graphs/kubernetes/statefulset.yaml
+    - dbs/postgres_django/kubernetes/deployment.yaml
+    - dbs/postgres_django/kubernetes/ingress.yaml
+    - dbs/postgres_django/kubernetes/persistent-volume.yaml
+    - dbs/postgres_django/kubernetes/pv-claim.yaml
+    - dbs/postgres_django/kubernetes/service.yaml
+    - django/kubernetes/configmap.yaml
+    - django/kubernetes/deployment.yaml
+    - django/kubernetes/ingress.yaml
+    - django/kubernetes/secret.yaml
+    - django/kubernetes/service.yaml
+    - nodejs/graphs/kubernetes/configmap.yaml
+    - nodejs/graphs/kubernetes/deployment.yaml
+    - nodejs/graphs/kubernetes/ingress.yaml
+    - nodejs/graphs/kubernetes/secret.yaml
+    - nodejs/graphs/kubernetes/service.yaml
+    - rabbitmq/kubernetes/configmap.yaml
+    - rabbitmq/kubernetes/deployment.yaml
+    - rabbitmq/kubernetes/ingress.yaml
+    - rabbitmq/kubernetes/secret.yaml
+    - rabbitmq/kubernetes/service.yaml

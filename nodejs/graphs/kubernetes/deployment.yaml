@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphs-deployment
+  labels:
+    app: graphs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphs
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: graphs
+    spec:
+      containers:
+      - name: graphs
+        image: raminesmzad/graphs:latest
+        ports:
+          - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: graphs-configmap
+        - secretRef:
+            name: graphs-secret

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+  labels:
+    app: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+      - name: django
+        image: raminesmzad/django:latest
+        # command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+        ports:
+          - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: django-configmap
+        - secretRef:
+            name: django-secret
