@@ -8,6 +8,8 @@ django = "*"
 pika = "*"
 psycopg2 = "*"
 pytz = "*"
+djangorestframework = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 
