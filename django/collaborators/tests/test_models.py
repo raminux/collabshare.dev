@@ -36,6 +36,7 @@ class CollaboratorModelTest(TestCase):
         self.assertFalse(self.collaborator.is_staff)
         self.assertTrue(self.collaborator.is_active)
         self.assertFalse(self.collaborator.is_superuser)
+        self.assertTrue(self.collaborator.date_joined)
         self.assertEqual(self.collaborator.get_full_name(), self.first_name + ' ' + self.last_name)
         self.assertEqual(self.collaborator.get_short_name(), self.first_name)
         self.assertEqual(self.collaborator.get_collabname(), self.email)
