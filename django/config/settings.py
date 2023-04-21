@@ -154,3 +154,5 @@ SPECTECULAR_SETTINGS = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+TEST_RUNNER = 'core.custom_test_runner.CustomTestRunner' 
