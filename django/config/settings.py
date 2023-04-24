@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -166,6 +167,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'level': 'INFO',
+            'stream': sys.stdout,
             'formatter': 'standard',
         },
         'file': {
@@ -176,7 +178,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
+        '': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
@@ -184,7 +186,7 @@ LOGGING = {
     },
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+            'format': '%(asctime)s [%(levelname)s] %(name)s %(filename)s-%(lineno)d: %(message)s',
         }
     }
 }
