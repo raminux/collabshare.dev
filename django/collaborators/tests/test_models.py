@@ -1,8 +1,12 @@
+import logging
 import pytz 
 from datetime import datetime
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.db import connections, DEFAULT_DB_ALIAS
+from django.contrib.auth.hashers import make_password
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -23,6 +27,11 @@ class CollaboratorModelTest(TestCase):
             last_name=self.last_name,
             login_method=self.login_method
         )
+        logger.info(self.collaborator.password)
+        
+    
+    def tearDown(self):
+        self.collaborator.delete()
     
     def test_create_collaborator(self):
         """
@@ -34,14 +43,21 @@ class CollaboratorModelTest(TestCase):
         self.assertEqual(self.collaborator.first_name, self.first_name)
         self.assertEqual(self.collaborator.last_name, self.last_name)
         self.assertFalse(self.collaborator.is_staff)
-        self.assertTrue(self.collaborator.is_active)
+        self.assertFalse(self.collaborator.is_active)
         self.assertFalse(self.collaborator.is_superuser)
         self.assertTrue(self.collaborator.date_joined)
+        self.assertFalse(self.collaborator.is_mobile_verified)
+        self.assertFalse(self.collaborator.is_email_verified)
         self.assertEqual(self.collaborator.get_full_name(), self.first_name + ' ' + self.last_name)
         self.assertEqual(self.collaborator.get_short_name(), self.first_name)
         self.assertEqual(self.collaborator.get_collabname(), self.email)
         self.assertEqual(f'{self.collaborator}', self.email)
-    
+        logger.info(f'password is {self.password}')
+
+    def test_password_is_hashed(self):
+        """ Test to ensure that the password is saved securely. """
+        self.assertTrue(self.collaborator.check_password(self.password))
+
     def test_login_method_choices(self):
         """
         Tests that login_method only allows the defined choices
@@ -82,8 +98,6 @@ class CollaboratorModelTest(TestCase):
             password=self.password
         )
         self.assertTrue(admin_ollaborator.is_staff)
-
-    # def tearDown(self):
         
 
     

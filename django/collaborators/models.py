@@ -1,10 +1,15 @@
+import logging
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.hashers import make_password 
+
+logger = logging.getLogger(__name__)
 
 
 class CollaboratorManager(BaseUserManager):
+    """ Manager for Collaborators. """
     def create_user(self, email=None, mobile=None, password=None, **extra_fields):
         if not (email or mobile):
             raise ValueError("Collaborators must have an email address or mobile number")
@@ -12,9 +17,16 @@ class CollaboratorManager(BaseUserManager):
         email = self.normalize_email(email) if email else None
         mobile = self.normalize_mobile(mobile) if mobile else None
         collaborator = self.model(email=email, mobile=mobile, **extra_fields)
+        logger.info(collaborator.password)
+        logger.info(password)
         collaborator.set_password(password)
-        collaborator.save(using=self._db)
+        logger.info(collaborator.password)
+        collaborator.save()
         return collaborator
+    
+    def create(self, email=None, mobile=None, password=None, **extra_fields):
+        """ Creates and saves a new Collaborator with the given email, mobile and password. """
+        return self.create_user(email, mobile, password, **extra_fields)
 
     def normalize_mobile(self, mobile):
         """
@@ -37,13 +49,15 @@ class Collaborator(AbstractBaseUser, PermissionsMixin):
 #     # It is recommended to store email addresses in encrypted
 #     # TO DO: Check email encryption when saving Apple id or email?
     mobile = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    is_mobile_verified = models.BooleanField(default=False)
     email = models.EmailField(unique=True, blank=True, null=True)
+    is_email_verified = models.BooleanField(default=False)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True) 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(
         _("active"),
-        default=True,
+        default=False,
         help_text=_(
             "Designates whether this user should be treated as active. "
             "Unselect this instead of deleting accounts."
@@ -94,8 +108,13 @@ class Collaborator(AbstractBaseUser, PermissionsMixin):
 
     def get_collabname(self): # collabname replaces username in traditional web 
         return self.email or self.mobile
+    
+    def create(self, email=None, mobile=None, password=None, **extra_fields):
+        """ Creates and saves a new Collaborator with the given email, mobile and password. """
+        return self.objects.create_user(email=email, mobile=mobile, password=password, **extra_fields)
 
     class Meta:
         verbose_name = "Collaborator"
         verbose_name_plural = "Collaborators"
+    
 
