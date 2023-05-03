@@ -26,9 +26,7 @@ class CollaboratorModelTest(TestCase):
             first_name=self.first_name,
             last_name=self.last_name,
             login_method=self.login_method
-        )
-        logger.info(self.collaborator.password)
-        
+        )        
     
     def tearDown(self):
         self.collaborator.delete()
@@ -52,7 +50,6 @@ class CollaboratorModelTest(TestCase):
         self.assertEqual(self.collaborator.get_short_name(), self.first_name)
         self.assertEqual(self.collaborator.get_collabname(), self.email)
         self.assertEqual(f'{self.collaborator}', self.email)
-        logger.info(f'password is {self.password}')
 
     def test_password_is_hashed(self):
         """ Test to ensure that the password is saved securely. """

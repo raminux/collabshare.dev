@@ -17,10 +17,7 @@ class CollaboratorManager(BaseUserManager):
         email = self.normalize_email(email) if email else None
         mobile = self.normalize_mobile(mobile) if mobile else None
         collaborator = self.model(email=email, mobile=mobile, **extra_fields)
-        logger.info(collaborator.password)
-        logger.info(password)
         collaborator.set_password(password)
-        logger.info(collaborator.password)
         collaborator.save()
         return collaborator
     
